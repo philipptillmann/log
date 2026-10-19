@@ -1,0 +1,8 @@
+.git
+.env
+.env.*
+tests
+backups
+__pycache__
+*.sqlite3*
+.update.lock

@@ -1,0 +1,29 @@
+name: log
+services:
+  log:
+    build: .
+    restart: unless-stopped
+    init: true
+    ports:
+      - "${LOG_BIND:-127.0.0.1}:${LOG_PORT:-8080}:8080"
+    environment:
+      LOG_DATA: /data/log.sqlite3
+      LOG_ALLOW_REGISTRATION: "${LOG_ALLOW_REGISTRATION:-false}"
+    volumes:
+      - log-data:/data
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 4
+      start_period: 10s
+volumes:
+  log-data:
+    name: log-data

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>log</title><link rel="icon" href="/logo.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<section id="auth-view">
+<form id="auth-form">
+<h1><img src="/logo.svg" alt="" width="42" height="42">log</h1>
+<label>Account<input id="username" name="username" autocomplete="username" required pattern="[a-zA-Z0-9_.\-]{1,64}" maxlength="64"></label>
+<label>Passwort<input id="password" name="password" type="password" autocomplete="current-password" required></label>
+<button type="submit" id="login">Anmelden</button>
+<button type="button" id="register" class="quiet">Account erstellen</button>
+<p id="auth-error" role="alert"></p>
+</form>
+</section>
+<section id="app" hidden>
+<header><button id="toggle-sidebar" class="quiet" aria-label="Seitenleiste umschalten" aria-expanded="true">☰</button><img src="/logo.svg" alt="" width="30" height="30"><span class="brand">log</span><span id="greeting"></span><span id="status" role="status"></span><button id="export" class="quiet">Exportieren</button><button id="logout" class="quiet">Sperren</button></header>
+<div class="layout">
+<aside id="sidebar">
+<button id="new">Neuer Eintrag</button>
+<input id="search" type="search" aria-label="Einträge durchsuchen">
+<select id="folder-filter" aria-label="Ordner"><option value="">Alle Ordner</option></select>
+<select id="tag-filter" aria-label="Tag"><option value="">Alle Tags</option></select>
+<nav id="notes" aria-label="Einträge"></nav>
+</aside>
+<main>
+<div class="metadata"><input id="date" type="date" aria-label="Datum"><button id="details-toggle" class="quiet" aria-expanded="false">Ordner & Tags</button><button id="delete" class="quiet" aria-label="Eintrag löschen">Löschen</button></div>
+<div id="details" hidden><label>Ordner<input id="folder" list="folders" autocomplete="off" aria-label="Ordnerpfad, zum Beispiel Privat/Gedanken"></label><datalist id="folders"></datalist><label>Tags<input id="tags" aria-label="Tags, mit Komma getrennt"></label></div>
+<input id="title" aria-label="Titel" autocomplete="off">
+<textarea id="body" aria-label="Eintrag" spellcheck="true"></textarea>
+</main>
+</div>
+</section>
+<script src="/app.js" defer></script>
+</body></html>
