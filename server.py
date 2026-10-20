@@ -62,7 +62,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('Referrer-Policy', 'no-referrer')
         self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'")
         self.end_headers()
-        self.wfile.write(content)
+        if self.command != 'HEAD':
+            self.wfile.write(content)
 
     def user(self):
         token = self.headers.get('Authorization', '').removeprefix('Bearer ')
@@ -71,6 +72,9 @@ class Handler(BaseHTTPRequestHandler):
             if session and session[1] > time.time():
                 return session[0]
         return None
+
+    def do_HEAD(self):
+        self.do_GET()
 
     def do_GET(self):
         path = urlsplit(self.path).path
@@ -87,6 +91,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.reply(200, {'vault': json.loads(row['vault']) if row['vault'] else None, 'version': row['version']})
         files = {'/': ('index.html', 'text/html; charset=utf-8'), '/app.js': ('app.js', 'text/javascript; charset=utf-8'), '/style.css': ('style.css', 'text/css; charset=utf-8'), '/logo.svg': ('logo.svg', 'image/svg+xml')}
         files.update({
+            '/index.html': ('index.html', 'text/html; charset=utf-8'),
+            '/favicon.png': ('apple-touch-icon.png', 'image/png'),
             '/manifest.webmanifest': ('manifest.webmanifest', 'application/manifest+json'),
             '/icon.svg': ('icon.svg', 'image/svg+xml'),
             '/icon-192.png': ('icon-192.png', 'image/png'),

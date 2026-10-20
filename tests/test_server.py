@@ -115,6 +115,22 @@ class API(unittest.TestCase):
             response.read()
         conn.close()
 
+    def test_icon_metadata_requests_match_downloads(self):
+        conn = http.client.HTTPConnection('127.0.0.1', self.http.server_port)
+        for path in ['/apple-touch-icon-night-blue.png', '/apple-touch-icon.png?v=night-blue-3', '/favicon.png?v=night-blue-3', '/manifest.webmanifest', '/', '/index.html']:
+            conn.request('GET', path)
+            response = conn.getresponse()
+            self.assertEqual(response.status, 200)
+            content_type = response.getheader('Content-Type')
+            length = len(response.read())
+            conn.request('HEAD', path)
+            response = conn.getresponse()
+            self.assertEqual(response.status, 200)
+            self.assertEqual(response.getheader('Content-Type'), content_type)
+            self.assertEqual(int(response.getheader('Content-Length')), length)
+            self.assertEqual(response.read(), b'')
+        conn.close()
+
     def test_session_expiry_and_static_headers(self):
         self.register()
         token = self.login()
