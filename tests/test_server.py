@@ -89,6 +89,32 @@ class API(unittest.TestCase):
             status, _ = self.request('/api/salt', {'name': 'alice'})
         self.assertEqual(status, 429)
 
+    def test_home_screen_icons_and_versioned_manifest(self):
+        import struct
+        conn = http.client.HTTPConnection('127.0.0.1', self.http.server_port)
+        conn.request('GET', '/?refresh=icons')
+        response = conn.getresponse()
+        self.assertEqual(response.status, 200)
+        self.assertIn(b'/apple-touch-icon-night-blue.png', response.read())
+        for path in ['/apple-touch-icon-night-blue.png', '/apple-touch-icon.png', '/apple-touch-icon-precomposed.png']:
+            conn.request('GET', path)
+            response = conn.getresponse()
+            self.assertEqual(response.status, 200)
+            self.assertEqual(response.getheader('Content-Type'), 'image/png')
+            png = response.read()
+            self.assertEqual(png[:8], b'\x89PNG\r\n\x1a\n')
+            self.assertEqual(struct.unpack('>II', png[16:24]), (180, 180))
+        conn.request('GET', '/manifest.webmanifest?v=night-blue-2')
+        response = conn.getresponse()
+        self.assertEqual(response.status, 200)
+        manifest = json.loads(response.read())
+        for icon in manifest['icons']:
+            conn.request('GET', icon['src'])
+            response = conn.getresponse()
+            self.assertEqual(response.status, 200)
+            response.read()
+        conn.close()
+
     def test_session_expiry_and_static_headers(self):
         self.register()
         token = self.login()

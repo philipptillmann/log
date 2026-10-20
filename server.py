@@ -11,6 +11,7 @@ import sqlite3
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import urlsplit
 
 DB = os.environ.get('LOG_DATA', '/data/log.sqlite3')
 STATIC = Path(__file__).parent / 'static'
@@ -72,11 +73,12 @@ class Handler(BaseHTTPRequestHandler):
         return None
 
     def do_GET(self):
-        if self.path == '/health':
+        path = urlsplit(self.path).path
+        if path == '/health':
             with connect() as db:
                 db.execute('SELECT 1').fetchone()
             return self.reply(200, {'ok': True})
-        if self.path == '/api/vault':
+        if path == '/api/vault':
             name = self.user()
             if not name:
                 return self.reply(401, {'error': 'Bitte erneut anmelden.'})
@@ -90,9 +92,11 @@ class Handler(BaseHTTPRequestHandler):
             '/icon-192.png': ('icon-192.png', 'image/png'),
             '/icon-512.png': ('icon-512.png', 'image/png'),
             '/apple-touch-icon.png': ('apple-touch-icon.png', 'image/png'),
+            '/apple-touch-icon-night-blue.png': ('apple-touch-icon.png', 'image/png'),
+            '/apple-touch-icon-precomposed.png': ('apple-touch-icon.png', 'image/png'),
         })
-        if self.path in files:
-            filename, mime = files[self.path]
+        if path in files:
+            filename, mime = files[path]
             return self.reply(200, (STATIC / filename).read_bytes(), mime)
         self.reply(404, {'error': 'Nicht gefunden.'})
 

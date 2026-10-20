@@ -10,19 +10,19 @@
   "theme_color": "#101a2c",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "/icon-192.png?v=night-blue-2",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/icon-512.png?v=night-blue-2",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icon.svg",
+      "src": "/icon.svg?v=night-blue-2",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
