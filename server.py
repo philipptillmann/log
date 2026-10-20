@@ -84,6 +84,13 @@ class Handler(BaseHTTPRequestHandler):
                 row = db.execute('SELECT vault, version FROM users WHERE name=?', (name,)).fetchone()
             return self.reply(200, {'vault': json.loads(row['vault']) if row['vault'] else None, 'version': row['version']})
         files = {'/': ('index.html', 'text/html; charset=utf-8'), '/app.js': ('app.js', 'text/javascript; charset=utf-8'), '/style.css': ('style.css', 'text/css; charset=utf-8'), '/logo.svg': ('logo.svg', 'image/svg+xml')}
+        files.update({
+            '/manifest.webmanifest': ('manifest.webmanifest', 'application/manifest+json'),
+            '/icon.svg': ('icon.svg', 'image/svg+xml'),
+            '/icon-192.png': ('icon-192.png', 'image/png'),
+            '/icon-512.png': ('icon-512.png', 'image/png'),
+            '/apple-touch-icon.png': ('apple-touch-icon.png', 'image/png'),
+        })
         if self.path in files:
             filename, mime = files[self.path]
             return self.reply(200, (STATIC / filename).read_bytes(), mime)

@@ -1,6 +1,6 @@
 # log
 
-A minimal, self-hosted encrypted journal. No slogans, prompts, streaks, or goals. Just writing, optional titles, nested folder paths, tags, and search. Forest green and warm paper, with a book/keyhole logo.
+A minimal, self-hosted encrypted journal. No slogans, prompts, streaks, or goals. Just writing, optional titles, nested folder paths, tags, and search. A quiet night-blue palette with the same book/keyhole logo on the website and home-screen icon.
 
 ## Install in your home folder
 
@@ -110,3 +110,7 @@ python3 tests/browser_smoke.py
 ```
 
 Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to use an existing Chromium binary instead.
+
+## Home-screen icon
+
+The web manifest and iPhone touch icon use the same blue book/keyhole logo as the website. In Safari, choose Share → Add to Home Screen. If an existing shortcut still shows the old icon after updating, remove that shortcut and add it again. This does not delete journal data. The home-screen shortcut requires a connection to your server; no offline note storage is added.
